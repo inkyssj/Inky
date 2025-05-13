@@ -1,15 +1,12 @@
-const {
-	default: makeWASocket,
-	useMultiFileAuthState,
-	DisconnectReason,
-	makeCacheableSignalKeyStore,
-	getContentType
-} = require('@whiskeysockets/baileys')
 const P = require('pino')
+const path = require('path')
+const fs = require('node:fs')
+const { fileURLToPath } = require('url')
+const { useMultiFileAuthState, makeCacheableSignalKeyStore, toBuffer, makeWASocket, jidDecode, downloadContentFromMessage, DisconnectReason, getContentType } = require('baileys')
 const { exec } = require('child_process')
 
 const start = async() => {
-	const level = P({ level: 'silent' })
+	const level = P({ level: 'silent' }).child({ level: "silent" })
 	const {
 		state,
 		saveCreds
@@ -41,14 +38,28 @@ const start = async() => {
 	
 	sock.ev.on('creds.update', saveCreds)
 	
-	sock.ev.on('messages.upsert', messages => {
-		messages = messages.messages[0]
-		if (!messages) return
-		
-		messages.message = (getContentType(messages.message) === 'ephemeralMessage') ? messages.message.ephemeralMessage.message : messages.message
-		if (messages.key && messages.key.remoteJid === 'status@broadcast') return
-		
-		require('./message/upsert')(sock, messages)
+	sock.ev.on('messages.upsert', async(type, messages) => {
+		if (type === 'notify') {
+			m = messages.messages[0]
+			if (!m) return
+			
+			m.message = (getContentType(m.message) === 'ephemeralMessage') ? m.message.ephemeralMessage.message : m.message
+			if (m.key && m.key.remoteJid === 'status@broadcast') return
+
+			let pluginFolder = path.join(__dirname, 'plugins')
+			let pluginFilter = (filename) => /\.js$/.test(filename)
+			let plugins = {}
+			for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
+				try {
+					let modules = await require(path.join(pluginFolder, filename))
+					plugins[filename] = modules.default
+				} catch(e) {
+					delete plugins[filename]
+				}
+			}
+			
+			await require('./message/upsert')(sock, m, plugins)
+		}
 	})
 }
 
