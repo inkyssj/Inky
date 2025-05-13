@@ -2,7 +2,7 @@ const P = require('pino')
 const path = require('path')
 const fs = require('node:fs')
 const { fileURLToPath } = require('url')
-const { useMultiFileAuthState, makeCacheableSignalKeyStore, toBuffer, makeWASocket, jidDecode, downloadContentFromMessage, DisconnectReason, getContentType } = require('baileys')
+const { useMultiFileAuthState, makeCacheableSignalKeyStore, makeWASocket, DisconnectReason, getContentType } = require('baileys')
 const { exec } = require('child_process')
 
 const start = async() => {
