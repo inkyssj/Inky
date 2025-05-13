@@ -5,6 +5,8 @@ const { fileURLToPath } = require('url')
 const { useMultiFileAuthState, makeCacheableSignalKeyStore, makeWASocket, DisconnectReason, getContentType } = require('baileys')
 const { exec } = require('child_process')
 
+const __dirname = path.dirname(fileURLToPath(require.meta.url))
+
 const start = async() => {
 	const level = P({ level: 'silent' }).child({ level: "silent" })
 	const {
