@@ -5,6 +5,7 @@ module.exports =  {
 	models: '%prefix%command',
 	desactive: false,
 	runCode: async(m, { sock }) => {
+		if (m.isGroup) return
 		if (m.quoted) {
 			let buffer = await m.quoted.download()
 			if (m.quoted.msg.mimetype) m.quoted.msg.mimetype.includes('video') ? (await m.replyVid(buffer)) : (await m.replyImg(buffer))
