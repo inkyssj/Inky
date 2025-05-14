@@ -8,10 +8,10 @@ module.exports =  {
 		const moment = require('moment-timezone')
 		const argentinaDate = moment().tz('America/Argentina/Buenos_Aires')
 		
-		let teks = `> *Inky - Bot*
+		let teks = `🌸 *Inky - Bot* 🌸
 
 - *Descripción*.
-      *WhatsApp Bot* creado a partir de la *Libreria Baileys*, para automatizar y ayudar al usuario.
+      *WhatsApp Bot* creado a partir de la *Libreria Baileys*, para automatizar y ayudar al usuario. Creado por @5491121931040
 
 - *Informacion*.
       *Pais*: Argentina
@@ -21,6 +21,8 @@ module.exports =  {
 - *Comandos*.
       *Prefijo*: -
       *Observación*: Comandos en creación.
+
+🌸 *Que tengas excelente día @${m.sender.replace('@s.whatsapp.net', '')}* 🌸
 `
 		await m.reply(teks)
 	}
