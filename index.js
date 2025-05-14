@@ -46,6 +46,8 @@ const start = async() => {
 			m.message = (getContentType(m.message) === 'ephemeralMessage') ? m.message.ephemeralMessage.message : m.message
 			if (m.key && m.key.remoteJid === 'status@broadcast') return
 
+			console.log(m)
+
 			let pluginFolder = path.join(__dirname, 'plugins')
 			let pluginFilter = (filename) => /\.js$/.test(filename)
 			let plugins = {}
@@ -57,8 +59,6 @@ const start = async() => {
 					delete plugins[filename]
 				}
 			}
-
-			console.log(m)
 			
 			await require('./message/upsert')(sock, m, plugins)
 		}
