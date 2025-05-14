@@ -38,28 +38,27 @@ const start = async() => {
 	
 	sock.ev.on('creds.update', saveCreds)
 	
-	sock.ev.on('messages.upsert', async(messages) => {
-		console.log(messages)
-			//m = messages[0]
-			/*if (m.key.remoteJid === 'status@broadcast') return
-			
-			if (m.message) {
-				m.message = m.message?.ephemeralMessage ? m.message.ephemeralMessage.message : m.message
-				console.log(m)
-				let pluginFolder = path.join(__dirname, 'plugins')
-				let pluginFilter = (filename) => /\.js$/.test(filename)
-				let plugins = {}
-					for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
-						try {
-							let modules = require(path.join(pluginFolder, filename))
-							plugins[filename] = modules.default
-						} catch(e) {
-							delete plugins[filename]
-						}
+	sock.ev.on('messages.upsert', async({ type, messages }) => {
+		m = messages[0]
+		if (m.key.remoteJid === 'status@broadcast') return
+		
+		if (m.message) {
+			m.message = m.message?.ephemeralMessage ? m.message.ephemeralMessage.message : m.message
+			console.log(m)
+			let pluginFolder = path.join(__dirname, 'plugins')
+			let pluginFilter = (filename) => /\.js$/.test(filename)
+			let plugins = {}
+				for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
+					try {
+						let modules = require(path.join(pluginFolder, filename))
+						plugins[filename] = modules.default
+					} catch(e) {
+						delete plugins[filename]
 					}
-			}
+				}
+		}
 			
-			await require('./message/upsert')(sock, m, plugins)*/
+			await require('./message/upsert')(sock, m, plugins)
 	})
 }
 
