@@ -39,7 +39,6 @@ const start = async() => {
 	sock.ev.on('creds.update', saveCreds)
 	
 	sock.ev.on('messages.upsert', async(type, messages) => {
-		if (type === 'notify') {
 			m = messages[0]
 			if (m.key.remoteJid === 'status@broadcast') return
 			
@@ -60,7 +59,6 @@ const start = async() => {
 			}
 			
 			await require('./message/upsert')(sock, m, plugins)
-		}
 	})
 }
 
