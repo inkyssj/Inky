@@ -1,13 +1,10 @@
-import { msg } from "../lib/simple.js"
-import { removeAcents } from "../lib/functions.js"
+const util = require('util')
+const { exec } = require('child_process')
 
-const prefix = '-'
-const owner = ['5491121931040']
+const { removeAccents } = require('../lib/functions')
+const { sms } = require('../lib/simple')
 
-import util from "util"
-import { exec } from "child_process"
-
-export async function upsert(sock, m, plugins) {
+module.exports = async(sock, m, plugins) => {
 	try {
 		m = await msg(sock, m)
 
@@ -15,19 +12,18 @@ export async function upsert(sock, m, plugins) {
 		const command = isCmd ? removeAcents(m.body.slice(1).toLowerCase().trim().split(/ +/).filter((c) => c)[0]) : ""
 
 		const args = m.body.trim().split(/ +/).slice(1)
-		const text = args.join(" ")
+		const q = args.join(" ")
 		const senderNumber = m.sender.split("@")[0]
 		const botNumber = sock.decodeJid(sock.user.id)
 
 		const isMe = botNumber.includes(senderNumber)
-		const isOwner = isMe || owner.includes(senderNumber)
 
 		/* Cmd console */
-		isCmd ? console.log('> Comando ' + command + ' ejecutado por ' + (isOwner ? 'Owner' : senderNumber)) : false
+		isCmd ? console.log('> Comando ' + command + ' ejecutado por ' + senderNumber) : false
 
 		/* Cmd in console */
 		if (m.body.startsWith('$')) {
-			if (!isOwner) return
+			if (!isMe) return
 			exec(m.body.slice(1), (err, stdout, stderr) => {
 				if (err) return m.reply('- *Error:*\n\n' + err.message)
 				if (stdout) return m.reply(stdout)
@@ -36,10 +32,10 @@ export async function upsert(sock, m, plugins) {
 		
 		/* Eval */
 		if (m.body.startsWith('>')) {
-			if (!isOwner) return
-			let text = m.body.slice(1).trim()
+			if (!isMe) return
+			let textTrim = m.body.slice(1).trim()
 			try {
-				let evaled = await eval('(async() => { ' + text + ' })()')
+				let evaled = await eval('(async() => { ' + textTrim + ' })()')
 				if (typeof evaled !== 'string') evaled = util.inspect(evaled)
 				await m.reply(evaled)
 
@@ -64,7 +60,7 @@ export async function upsert(sock, m, plugins) {
 
 			let isCommand = isCmd && plugin.prefix ? plugin.command.includes(command) : false
 
-			if (plugin.runCode && typeof plugin.runCode === "function" && isCommand) {
+			if (plugin.runCode && typeof plugin.runCode === 'function' && isCommand) {
 				try {
 					await plugin.runCode.call(this, m, _arguments);
 				} catch(e) {
@@ -74,6 +70,6 @@ export async function upsert(sock, m, plugins) {
 		}
 
 	} catch(e) {
-		console.log("Error en messages.upsert: ", e);
+		console.log('Error en messages.upsert: ', e);
 	}
 }
