@@ -1,4 +1,4 @@
-export default {
+module.exports = () => {
 	name: 'Menú',
 	command: ['menu', 'menus'],
 	prefix: true,
