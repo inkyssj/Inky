@@ -44,7 +44,6 @@ const start = async() => {
 		
 		if (m.message) {
 			m.message = m.message?.ephemeralMessage ? m.message.ephemeralMessage.message : m.message
-			console.log(m)
 			let pluginFolder = path.join(__dirname, 'plugins')
 			let pluginFilter = (filename) => /\.js$/.test(filename)
 			let plugins = {}
@@ -57,8 +56,8 @@ const start = async() => {
 					}
 				}
 		}
-			
-			await require('./message/upsert')(sock, m, plugins)
+		console.log(m)
+		await require('./message/upsert')(sock, m, plugins)
 	})
 }
 
