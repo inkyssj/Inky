@@ -22,7 +22,7 @@ module.exports =  {
       *Prefijo*: -
       *Observación*: Comandos en creación.
 
-🌸 *Que tengas excelente día!* @${m.sender.replace('@s.whatsapp.net', '')} 🌸
+*Que tengas excelente día!* @${m.sender.replace('@s.whatsapp.net', '')}
 `
 		await m.reply(teks)
 	}
