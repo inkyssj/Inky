@@ -1,6 +1,6 @@
 module.exports = () => {
 	name: 'Menú',
-	command: ['menu', 'menus'],
+	command: 'menu',
 	prefix: true,
 	models: '%prefix%command',
 	desactive: false,
