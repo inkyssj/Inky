@@ -21,9 +21,6 @@ module.exports = async(sock, m, plugins) => {
 
 		const isMe = botNumber.includes(senderNumber)
 
-		/* Cmd console */
-		isCmd ? console.log('> Comando ' + command + ' ejecutado por ' + senderNumber) : false
-
 		/* Cmd in console */
 		if (m.body.startsWith('$')) {
 			if (!isMe) return
