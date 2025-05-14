@@ -51,10 +51,11 @@ const start = async() => {
 			plugins = {}
 				for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
 					try {
-						let modules = require(path.join(pluginFolder, filename))
-						plugins[filename] = modules.default
-					} catch(e) {
-						delete plugins[filename]
+						const module = await import(path.join(pluginFolder, filename));
+						plugins[filename] = module.default || module;
+					} catch (e) {
+						console.error(`Error al cargar ${filename}:`, e);
+						delete plugins[filename];
 					}
 				}
 		}
