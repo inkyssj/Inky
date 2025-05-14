@@ -46,7 +46,6 @@ module.exports = async(sock, m, plugins) => {
 
 		/* Plugins */
 		for (let name in plugins) {
-			if (m.isGroup) return
 			let plugin = plugins[name]
 
 			if (!plugin || plugin.desactive) continue
