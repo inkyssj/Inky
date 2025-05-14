@@ -2,10 +2,11 @@ const util = require('util')
 const { exec } = require('child_process')
 
 const { removeAccents } = require('../lib/functions')
-const { sms } = require('../lib/simple')
+const { client, sms } = require('../lib/simple')
 
 module.exports = async(sock, m, plugins) => {
 	try {
+		sock = await client(sock)
 		m = await msg(sock, m)
 
 		const isCmd = m.body.startsWith(prefix)
@@ -52,7 +53,7 @@ module.exports = async(sock, m, plugins) => {
 
 			let _arguments = {
 				sock,
-				v: m.isQuoted ? m.quoted : m,
+				v: m.quoted ? m.quoted : m,
 				plugins,
 				plugin,
 				name
