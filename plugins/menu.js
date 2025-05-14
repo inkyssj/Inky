@@ -8,7 +8,7 @@ module.exports =  {
 		const moment = require('moment-timezone')
 		const argentinaDate = moment().tz('America/Argentina/Buenos_Aires')
 		
-		let tesk = `> *Inky - Bot*
+		let teks = `> *Inky - Bot*
 
 - *Descripción*.
       *WhatsApp Bot* creado a partir de la *Libreria Baileys*, para automatizar y ayudar al usuario.
