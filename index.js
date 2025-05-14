@@ -42,11 +42,12 @@ const start = async() => {
 		m = messages[0]
 		if (m.key.remoteJid === 'status@broadcast') return
 		
+		let plugins = {}
+		
 		if (m.message) {
 			m.message = m.message?.ephemeralMessage ? m.message.ephemeralMessage.message : m.message
 			let pluginFolder = path.join(__dirname, 'plugins')
 			let pluginFilter = (filename) => /\.js$/.test(filename)
-			let plugins = {}
 				for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
 					try {
 						let modules = require(path.join(pluginFolder, filename))
