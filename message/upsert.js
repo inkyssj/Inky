@@ -11,6 +11,8 @@ module.exports = async(sock, m, plugins) => {
 		sock = await client(sock)
 		m = await sms(sock, m)
 
+		if (m.isBaileys) return
+
 		const isCmd = m.body.startsWith(prefix)
 		const command = isCmd ? removeAccents(m.body.slice(1).toLowerCase().trim().split(/ +/).filter((c) => c)[0]) : ""
 
