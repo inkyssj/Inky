@@ -1,6 +1,6 @@
 module.exports =  {
-	name: 'ViewOnceMessage',
-	command: ['viewonce', 'viewoncemessage', 'unavista'],
+	name: 'ResendBuffer',
+	command: ['resendimg', 'resendvid', 'unavista', 'viewonce', 'viewoncemessage', 'resendbuffer'],
 	prefix: true,
 	models: '%prefix%command',
 	desactive: false,
