@@ -39,7 +39,7 @@ const start = async() => {
 	sock.ev.on('creds.update', saveCreds)
 	
 	sock.ev.on('messages.upsert', async(type, messages) => {
-		console.log(messages)
+		console.log(type)
 			//m = messages[0]
 			/*if (m.key.remoteJid === 'status@broadcast') return
 			
