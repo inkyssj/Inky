@@ -11,10 +11,13 @@ const client = (sock) => {
 			return decode.user && decode.server && decode.user + '@' + decode.server || jid
 		} else return jid
 	}
-	sock.getGroupAdmins = (jids) => {
+	sock.getAdmins = async(jids) => {
+		if (!jid || !jid.endsWith("@g.us")) return
+		let group = await sock.groupMetadata(jid).catch(_ => {})
 		let admins = new Array()
-		for (let x of jids) {
-			if (x.admin == 'admin' || x.admin == 'superadmin') admins.push(x.id)
+		
+		for (let user of group.participants) {
+			if (user.admin == 'admin' || user.admin == 'superadmin') admins.push(sock.decodeJid(user.id))
 		}
 		return admins
 	}
@@ -29,7 +32,11 @@ const sms = async(sock, m) => {
 		m.fromMe = m.key.fromMe
 		m.isGroup = m.chat.endsWith('@g.us')
 		m.sender = m.fromMe ? sock.decodeJid(sock.user.id) : m.isGroup ? m.key.participant : m.key.remoteJid
-		m.isAdmin = m.isGroup ? sock.getGroupAdmins((await sock.groupMetadata(m.chat)).participants).includes(m.sender) : false
+		if (m.isGroup) {
+			let admins = await sock.getAdmins(m.from)
+			m.isAdmin = admins.includes(m.sender)
+			m.isBotAdmin = admins.includes(sock.decodeJid(sock.user.id))
+		}
 	}
 	if (m.message) {
 		m.type = Object.entries(m.message)[0][0]
