@@ -7,7 +7,7 @@ const { client, sms } = require('../lib/simple')
 module.exports = async(sock, m, plugins) => {
 	try {
 		sock = await client(sock)
-		m = await msg(sock, m)
+		m = await sms(sock, m)
 
 		const isCmd = m.body.startsWith(prefix)
 		const command = isCmd ? removeAcents(m.body.slice(1).toLowerCase().trim().split(/ +/).filter((c) => c)[0]) : ""
