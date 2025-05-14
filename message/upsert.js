@@ -12,7 +12,7 @@ module.exports = async(sock, m, plugins) => {
 		m = await sms(sock, m)
 
 		const isCmd = m.body.startsWith(prefix)
-		const command = isCmd ? removeAcents(m.body.slice(1).toLowerCase().trim().split(/ +/).filter((c) => c)[0]) : ""
+		const command = isCmd ? removeAccents(m.body.slice(1).toLowerCase().trim().split(/ +/).filter((c) => c)[0]) : ""
 
 		const args = m.body.trim().split(/ +/).slice(1)
 		const q = args.join(" ")
