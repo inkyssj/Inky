@@ -5,8 +5,6 @@ const { fileURLToPath } = require('url')
 const { useMultiFileAuthState, makeCacheableSignalKeyStore, makeWASocket, DisconnectReason, getContentType } = require('baileys')
 const { exec } = require('child_process')
 
-__dirname = path.dirname(fileURLToPath(import.meta.url))
-
 const start = async() => {
 	const level = P({ level: 'silent' }).child({ level: 'silent' })
 	const {
@@ -53,7 +51,7 @@ const start = async() => {
 			let plugins = {}
 			for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
 				try {
-					let modules = await require(path.join(pluginFolder, filename))
+					let modules = require(path.join(pluginFolder, filename))
 					plugins[filename] = modules.default
 				} catch(e) {
 					delete plugins[filename]
