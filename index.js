@@ -57,6 +57,8 @@ const start = async() => {
 					delete plugins[filename]
 				}
 			}
+
+			console.log(m)
 			
 			await require('./message/upsert')(sock, m, plugins)
 		}
