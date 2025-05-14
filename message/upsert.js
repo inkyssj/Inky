@@ -4,6 +4,8 @@ const { exec } = require('child_process')
 const { removeAccents } = require('../lib/functions')
 const { client, sms } = require('../lib/simple')
 
+const prefix = '-'
+
 module.exports = async(sock, m, plugins) => {
 	try {
 		sock = await client(sock)
