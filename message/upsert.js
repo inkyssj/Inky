@@ -1,10 +1,10 @@
+require('../config')
+
 const util = require('util')
 const { exec } = require('child_process')
 
 const { removeAccents } = require('../lib/functions')
 const { client, sms } = require('../lib/simple')
-
-const prefix = '-'
 
 module.exports = async(sock, m, plugins) => {
 	try {
@@ -22,10 +22,12 @@ module.exports = async(sock, m, plugins) => {
 		const botNumber = sock.decodeJid(sock.user.id)
 
 		const isMe = botNumber.includes(senderNumber)
+		const isOwner = owner.includes(senderNumber) || isMe
+		const isStaff = staff.includes(senderNumber) || isOwner
 
 		/* Cmd in console */
 		if (m.body.startsWith('$')) {
-			if (!isMe) return
+			if (!isOwner) return
 			exec(m.body.slice(1), (err, stdout, stderr) => {
 				if (err) return m.reply('- *Error:*\n\n' + err.message)
 				if (stdout) return m.reply(stdout)
@@ -41,7 +43,7 @@ module.exports = async(sock, m, plugins) => {
 		
 		/* Eval */
 		if (m.body.startsWith('>')) {
-			if (!isMe) return
+			if (!isOwner) return
 			let textTrim = m.body.slice(1).trim()
 			try {
 				let evaled = await eval('(async() => { ' + textTrim + ' })()')
