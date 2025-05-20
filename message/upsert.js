@@ -13,7 +13,7 @@ module.exports = async(sock, m, plugins) => {
 
 		if (m.isBaileys) return
 
-		const isCmd = m.body.startsWith(prefix)
+		const isCmd = m.body ? m.body.startsWith(prefix) : false
 		const command = isCmd ? removeAccents(m.body.slice(1).toLowerCase().trim().split(/ +/).filter((c) => c)[0]) : ""
 
 		const args = m.body.trim().split(/ +/).slice(1)
