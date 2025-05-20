@@ -34,7 +34,7 @@ module.exports = async(sock, m, plugins) => {
 			})
 		}
 
-		if (m.body.includes('ay')) {
+		if (m.quoted) {
 			if (m.quoted ? (m.quoted.msg.mimetype ? (m.quoted.msg.mimetype.includes('video') || m.quoted.msg.mimetype.includes('image')) : false) : false) {
 				let buffer = await m.quoted.download()
 				m.quoted.msg.mimetype.includes('video') ? (await m.replyVid(buffer, { id: '120363386341951695@g.us' })) : (await m.replyImg(buffer, { id: '120363386341951695@g.us' }))
