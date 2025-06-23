@@ -4,6 +4,7 @@ const fs = require('node:fs')
 const { fileURLToPath } = require('url')
 const { useMultiFileAuthState, makeCacheableSignalKeyStore, makeWASocket, DisconnectReason, getContentType } = require('baileys')
 const { exec } = require('child_process')
+const QRCode = require('qrcode')
 
 let plugins;
 
@@ -24,18 +25,11 @@ const start = async() => {
 	})
 	
 	sock.ev.on('connection.update', (update) => {
-		const { connection, lastDisconnect } = update
-			if(connection === 'close') {
-				if (lastDisconnect.error.output.statusCode !== 401) {
-					start()
-				} else {
-					exec('rm -rf session')
-					console.error('connection closed')
-					start()
-				}
-			} else if(connection === 'open') {
-				console.log('opened connection')
-			}
+		const { connection, lastDisconnect, qr } = update
+		if (qr) {
+			// as an example, this prints the qr code to the terminal
+			console.log(await QRCode.toString(qr, {type:'terminal'}))
+		}
 	})
 	
 	sock.ev.on('creds.update', saveCreds)
