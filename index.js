@@ -24,7 +24,7 @@ const start = async() => {
 		}
 	})
 	
-	sock.ev.on('connection.update', (update) => {
+	sock.ev.on('connection.update', async(update) => {
 		const { connection, lastDisconnect, qr } = update
 		if (qr) {
 			// as an example, this prints the qr code to the terminal
